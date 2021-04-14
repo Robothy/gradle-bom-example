@@ -1,0 +1,38 @@
+plugins {
+    id 'java-platform'
+    id 'maven-publish'
+}
+
+group 'org.example'
+version '1.0'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+configurations{
+    javaPlatform.allowDependencies()
+}
+
+dependencies {
+    api platform("org.springframework.boot:spring-boot-dependencies:2.4.4")
+    constraints {
+        api "org.apache.kafka:kafka-clients:2.6.0"
+        api "redis.clients:jedis:3.5.2"
+        api "org.springframework.batch:spring-batch-core"
+    }
+}
+
+publishing {
+    publications {
+        thirdPartPlatform(MavenPublication){
+            from components.javaPlatform
+            artifactId = "third-part-dependencies"
+        }
+    }
+
+    repositories {
+        mavenLocal()
+    }
+}
